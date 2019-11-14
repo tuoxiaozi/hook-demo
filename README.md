@@ -1,68 +1,68 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Redux
 
-## Available Scripts
+1. 核心概念
 
-In the project directory, you can run:
+   * state
+   * action: 就是一个普通的`js`对象(描述发生的指示器)
+   * reducer： 一个只接受state和action,并返回新state的函数（将state,和action串联起来）
 
-### `yarn start`
+2. 三大原则
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+   * 单一数据源: 整个应用的state被储存在一棵Object tree中，并且这个object tree只存在于唯一一个store中
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+   * State是只读的： 唯一改变state的方法是触发action,action是一个用于描述已发生事件的普通对象
 
-### `yarn test`
+   * 使用纯函数来执行修改： 为了描述action,如何改变state tree, 需要编写reducers
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+     
 
-### `yarn build`
+3. Action: 是把数据从应用传到sore的有效负荷，是store数据的唯一来源，一般会通过`store.dispatch()`将action传入store。
+4. Reducer: 指定了应用状态变化如何响应actions并发送到stroe的，只描述了有事情发生这一事实，并没有描述如何更新state
+5. Store职责
+   1. 维持应用的`state`
+   2. 提供`getState（）`方法获取state
+   3. 提供`dispatch(action)`方法更新state
+   4. 通过`subscribe(listener)`注册监听器
+   5. 通过`subscrible(listener)`返回的函数注销监听器
+6. 使用`combineReducers()将多个reducer合并成一个`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+7. API
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+   * # `createStore(reducer, [preloadedState], enhancer)`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+     创建一个Redux store来存放应用中所有的state
 
-### `yarn eject`
+8. `useState`
+~~~jsx
+    const [count, setCount] = useState(0)
+    <div>
+        <p>{count}<p>
+        <button onClick={()=>setCount(count + 1)}>+1</button>
+    </div>
+~~~
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+9. `useReducer`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+~~~jsx
+    const initalState = {count: 0}
+    function reducer(){}
+    const [state, dispatch] = useReducer(reducer,initalSate)
+    <button onClick={()=>dispatch({type="add"})}></button>
+~~~
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+10. `React Context`
+* 作用： Context 通过组件树提供了一个传递数据的方法，从而避免了在每一个层级手动的传递 props 属性
+* API：
+    + `React.createContext`: 创建一个上下文的容器(组件), defaultValue可以设置共享的默认数据
+    + `Provider`:用于生产共享数据的地方,value:放置共享的数据
+    + `Consumer`: 他是专门消费供应商(Provider 上面提到的)产生数据。Consumer需要嵌套在生产者下面。才能通过回调的方式拿到共享的数据源。当然也可以单独使用，那就只能消费到上文提到的defaultValue
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    ~~~jsx
+        const {Provider, Consumer} = React.createContext(defaultValue);
+        <Provider value={/*共享的数据*/}>
+            /*里面可以渲染对应的内容*/
+        </Provider>
+        <Consumer>
+        {value => /*根据上下文  进行渲染相应内容*/}
+        </Consumer>
+    ~~~
