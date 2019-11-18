@@ -3,6 +3,7 @@ import StateHook from './pages/useState/index'
 import EffectHook from './pages/useEffect/index'
 import ReducerHook from './pages/useReducer/index'
 import TodoList from './pages/useRef/index'
+import CallBack from './pages/useCallback/index'
 
 import { ContextProvider } from "./pages/useContext/reducer";
 import Counter from "./pages/useContext/conter";
@@ -20,6 +21,7 @@ function App() {
         <ContextProvider>
           <Counter />
         </ContextProvider>
+        <CallBack/>
       </div>
       <TodoList/>
     </div>
